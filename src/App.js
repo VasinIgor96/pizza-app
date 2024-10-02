@@ -48,6 +48,14 @@ function App() {
            
         },
       ],
+      extras: [
+        { name: 'Сир', price: 20 },
+        { name: 'Ковбаски', price: 30 },
+        { name: 'Печериці', price: 25 },
+        { name: 'Ананас', price: 15 },
+        { name: 'Кукурудза', price: 35 },
+        { name: 'Оливки', price: 20 },
+    ],
       
     },
     {
@@ -59,6 +67,14 @@ function App() {
         { volume: 'Середня', price: 145 },
         { volume: 'Велика', price: 175 },
       ],
+      extras: [
+        { name: 'Сир', price: 20 },
+        { name: 'Ковбаски', price: 30 },
+        { name: 'Печериці', price: 25 },
+        { name: 'Ананас', price: 15 },
+        { name: 'Кукурудза', price: 35 },
+        { name: 'Оливки', price: 20 },
+    ],
       
     },
     {
@@ -69,7 +85,15 @@ function App() {
         { volume: 'Мала', price: 120 },
         { volume: 'Середня', price: 120 },
         { volume: 'Велика', price: 160 },
-      ], 
+      ],
+      extras: [
+        { name: 'Сир', price: 20 },
+        { name: 'Ковбаски', price: 30 },
+        { name: 'Печериці', price: 25 },
+        { name: 'Ананас', price: 15 },
+        { name: 'Кукурудза', price: 35 },
+        { name: 'Оливки', price: 20 },
+    ], 
     },
     {
       name: 'Карбонара',
@@ -80,6 +104,14 @@ function App() {
         { volume: 'Середня', price: 150 },
         { volume: 'Велика', price: 200 },
       ],
+      extras: [
+        { name: 'Сир', price: 20 },
+        { name: 'Ковбаски', price: 30 },
+        { name: 'Печериці', price: 25 },
+        { name: 'Ананас', price: 15 },
+        { name: 'Кукурудза', price: 35 },
+        { name: 'Оливки', price: 20 },
+    ],
       
     },
   ];
@@ -88,34 +120,38 @@ function App() {
   const drinks = [
     {
       name: 'Кока-Кола',
+      image: `${process.env.PUBLIC_URL}/images/kola.png`,
       variants: [
         { volume: 0.33, price: 20 },
-        { volume: 0.5, price: 25 },
-        { volume: 1, price: 30 },
+        { volume: 0.5, price: 30 },
+        { volume: 1, price: 60 },
       ],
     },
     {
       name: 'Фанта',
+      image: `${process.env.PUBLIC_URL}/images/fanta.png`,
       variants: [
         { volume: 0.33, price: 20 },
-        { volume: 0.5, price: 25 },
-        { volume: 1, price: 30 },
+        { volume: 0.5, price: 30 },
+        { volume: 1, price: 60 },
       ],
     },
     {
       name: 'Спрайт',
+      image: `${process.env.PUBLIC_URL}/images/sprite.png`,
       variants: [
         { volume: 0.33, price: 20 },
-        { volume: 0.5, price: 25 },
-        { volume: 1, price: 30 },
+        { volume: 0.5, price: 30 },
+        { volume: 1, price: 60 },
       ],
     },
     {
       name: 'Сік',
+      image: `${process.env.PUBLIC_URL}/images/juice.png`,
       variants: [
-        { volume: 0.33, price: 25 },
+        { volume: 0.33, price: 20 },
         { volume: 0.5, price: 30 },
-        { volume: 1, price: 35 },
+        { volume: 1, price: 60 },
       ],
     },
   ];
