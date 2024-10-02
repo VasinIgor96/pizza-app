@@ -8,6 +8,7 @@ function OrderForm({ cartItems }) {
   const [comments, setComments] = useState('');
   const [error, setError] = useState('');
 
+  // Завантажуємо збережене замовлення з localStorage
   useEffect(() => {
     const savedOrder = JSON.parse(localStorage.getItem('order'));
     if (savedOrder) {
@@ -18,6 +19,7 @@ function OrderForm({ cartItems }) {
     }
   }, []);
 
+  // Зберігаємо замовлення у localStorage
   useEffect(() => {
     const order = {
       name,
@@ -29,9 +31,11 @@ function OrderForm({ cartItems }) {
     localStorage.setItem('order', JSON.stringify(order));
   }, [name, phone, address, comments, cartItems]);
 
+  // Обробка відправлення форми
   const handleSubmit = (e) => {
     e.preventDefault();
     
+    // Перевірка обов'язкових полів
     if (!name || !phone || !address) {
       setError('Будь ласка, заповніть всі обов\'язкові поля.');
       return;
@@ -47,6 +51,7 @@ function OrderForm({ cartItems }) {
 
     console.log('Замовлення:', orderDetails);
     alert('Ваше замовлення прийнято!');
+    
     // Очистити поля після відправки
     setName('');
     setPhone('');
@@ -56,12 +61,13 @@ function OrderForm({ cartItems }) {
     localStorage.removeItem('order'); // Очищення збереження
   };
 
+  // Обчислення загальної вартості
   const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
     <div>
       <h2>Оформлення замовлення</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && <p className="error">{error}</p>}
       <p>Загальна сума: {totalPrice} грн</p>
       <form onSubmit={handleSubmit}>
         <div>

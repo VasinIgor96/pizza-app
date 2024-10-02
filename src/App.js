@@ -6,6 +6,7 @@ import PizzaItem from './components/PizzaItem';
 import DrinkItem from './components/DrinkItem';
 import Cart from './components/Cart';
 import OrderForm from './components/OrderForm';
+import './styles.scss'; // Підключаємо стилі
 
 function App() {
   const [cartItems, setCartItems] = useState([]);
@@ -36,9 +37,53 @@ function App() {
   };
 
   const pizzas = [
-    { name: 'Маргарита', description: 'Сир, томати, базилік', price: 120 },
-    { name: 'Пепероні', description: 'Сир, томати, пепероні', price: 150 }
+    {
+      name: 'Маргарита',
+      image: `${process.env.PUBLIC_URL}/images/margarita.png`,
+      description: 'Моцарела, томати, базилік. Соус: томатний',
+      variants: [
+        { volume: 'Мала', price: 120 },
+        { volume: 'Середня', price: 100 },
+        { volume: 'Велика', price: 150, 
+           
+        },
+      ],
+      
+    },
+    {
+      name: 'Пепероні',
+      image: `${process.env.PUBLIC_URL}/images/pepperoni.png`,
+      description: 'Моцарела, салямі, прошутто котто, томати, гострий перць пепероні. Соус: томатний',
+      variants: [
+        { volume: 'Мала', price: 120 },
+        { volume: 'Середня', price: 145 },
+        { volume: 'Велика', price: 175 },
+      ],
+      
+    },
+    {
+      name: 'Чотири сири',
+      image: `${process.env.PUBLIC_URL}/images/quattro_formaggi.png`,
+      description: 'Моцарела, гауда, горгонзола та пармезан. Соус: вершковий',
+      variants: [
+        { volume: 'Мала', price: 120 },
+        { volume: 'Середня', price: 120 },
+        { volume: 'Велика', price: 160 },
+      ], 
+    },
+    {
+      name: 'Карбонара',
+      image: `${process.env.PUBLIC_URL}/images/carbonara.png`,
+      description: 'Моцарела, томати, прошутто котто, бекон та перепелині яйця. Соус: вершковий',
+      variants: [
+        { volume: 'Мала', price: 120 },
+        { volume: 'Середня', price: 150 },
+        { volume: 'Велика', price: 200 },
+      ],
+      
+    },
   ];
+  
 
   const drinks = [
     {
@@ -74,8 +119,6 @@ function App() {
       ],
     },
   ];
-  
-  
 
   return (
     <Router>
