@@ -1,20 +1,18 @@
-// src/components/Menu.js
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-function Menu() {
+const Menu = () => {
   return (
-    <div>
-      <h1>Меню</h1>
-      <nav>
-        <ul>
-          <li><Link to="/pizza">Піца</Link></li>
-          <li><Link to="/drinks">Напої</Link></li>
-          <li><Link to="/cart">Кошик</Link></li>
-        </ul>
-      </nav>
-    </div>
+    <nav>
+      <ul>
+        <li><Link to="/">Головна</Link></li>
+        <li><Link to="/pizza">Піца</Link></li>
+        <li><Link to="/drinks">Напої</Link></li>
+        <li><Link to="/cart">Кошик</Link></li>
+        <li><Link to="/order">Замовлення</Link></li>
+      </ul>
+    </nav>
   );
-}
+};
 
 export default Menu;

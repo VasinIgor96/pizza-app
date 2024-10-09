@@ -24,13 +24,23 @@ function App() {
       updatedCartItems[existingItemIndex].quantity += 1;
       setCartItems(updatedCartItems);
     } else {
-      setCartItems([...cartItems, { ...item, quantity: 1 }]);
+      const totalPrice = item.type === 'drink'
+        ? item.selectedVariant.price
+        : item.variants.find(v => v.size === item.size).price;
+
+      // Додаємо обрані інгредієнти до об'єкту товару
+      const selectedExtras = item.selectedExtras || []; // Передаємо обрані інгредієнти
+      setCartItems([...cartItems, { ...item, quantity: 1, totalPrice, selectedExtras }]);
     }
   };
 
   const updateQuantity = (index, newQuantity) => {
     const updatedCartItems = [...cartItems];
     updatedCartItems[index].quantity = newQuantity;
+    const price = updatedCartItems[index].type === 'drink'
+      ? updatedCartItems[index].selectedVariant.price // Отримуємо ціну напою
+      : updatedCartItems[index].variants.find(v => v.size === updatedCartItems[index].size).price; // Отримуємо ціну піци
+    updatedCartItems[index].totalPrice = price * newQuantity; // Оновлюємо загальну ціну
     setCartItems(updatedCartItems);
   };
 
@@ -41,12 +51,7 @@ function App() {
 
   // Функція для обчислення загальної суми
   const calculateTotal = () => {
-    return cartItems.reduce((total, item) => {
-      const price = item.type === 'drink'
-        ? item.selectedVariant.price // Отримуємо ціну напою
-        : item.variants.find(v => v.size === item.size).price; // Отримуємо ціну піци
-      return total + (price * item.quantity);
-    }, 0);
+    return cartItems.reduce((total, item) => total + (item.totalPrice * item.quantity), 0);
   };
 
   const pizzas = [
@@ -178,7 +183,11 @@ function App() {
         />
         <Route path="/cart" element={
           <>
-            <Cart cartItems={cartItems} updateQuantity={updateQuantity} removeFromCart={removeFromCart} />
+            <Cart 
+              cartItems={cartItems} 
+              updateQuantity={updateQuantity} 
+              removeFromCart={removeFromCart} 
+            />
             <h3>Загальна сума: {calculateTotal()} грн</h3>
           </>
         } />
