@@ -20,9 +20,16 @@ function PizzaItem({ pizza, addToCart }) {
       size,
       dough,
       extras,
-      extrasPrice: getExtrasPrice(), // Додаємо загальну ціну за додаткові інгредієнти до кошика
+      totalPrice: getTotalPrice(),  // Змінюємо на getTotalPrice
+      type: 'pizza',
     };
     addToCart(pizzaToAdd);
+  };
+
+  const getTotalPrice = () => {
+    const variant = pizza.variants.find(variant => variant.volume === size);
+    const extrasPrice = getExtrasPrice();
+    return variant ? (variant.price + extrasPrice) : 0; // Додаємо перевірку на наявність варіанту
   };
 
   const getExtrasPrice = () => {
@@ -37,13 +44,16 @@ function PizzaItem({ pizza, addToCart }) {
       <img src={pizza.image} alt={pizza.name} className="pizza-image" />
       <h3>{pizza.name}</h3>
       <p>{pizza.description}</p>
-
+      <p>Ціна: {getTotalPrice()} грн</p> {/* Змінюємо на getTotalPrice */}
+      
       <div>
         <label>Розмір піци: </label>
         <select value={size} onChange={(e) => setSize(e.target.value)}>
-          <option value="Мала">Мала</option>
-          <option value="Середня">Середня</option>
-          <option value="Велика">Велика</option>
+          {pizza.variants.map(variant => (
+            <option key={variant.volume} value={variant.volume}>
+              {variant.volume}
+            </option>
+          ))}
         </select>
       </div>
 

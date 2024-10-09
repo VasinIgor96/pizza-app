@@ -1,4 +1,3 @@
-// src/App.js
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Menu from './components/Menu';
@@ -6,14 +5,18 @@ import PizzaItem from './components/PizzaItem';
 import DrinkItem from './components/DrinkItem';
 import Cart from './components/Cart';
 import OrderForm from './components/OrderForm';
-import './styles.scss'; // Підключаємо стилі
+import './styles.scss';
 
 function App() {
   const [cartItems, setCartItems] = useState([]);
 
   const addToCart = (item) => {
     const existingItemIndex = cartItems.findIndex(
-      (cartItem) => cartItem.name === item.name && cartItem.size === item.size
+      (cartItem) => 
+        cartItem.name === item.name && 
+        (item.type === 'drink' 
+          ? cartItem.selectedVariant.volume === item.selectedVariant.volume // Перевірка по об'єму для напоїв
+          : cartItem.size === item.size) // Перевірка по розміру для піци
     );
 
     if (existingItemIndex >= 0) {
@@ -36,86 +39,90 @@ function App() {
     setCartItems(updatedCartItems);
   };
 
+  // Функція для обчислення загальної суми
+  const calculateTotal = () => {
+    return cartItems.reduce((total, item) => {
+      const price = item.type === 'drink'
+        ? item.selectedVariant.price // Отримуємо ціну напою
+        : item.variants.find(v => v.size === item.size).price; // Отримуємо ціну піци
+      return total + (price * item.quantity);
+    }, 0);
+  };
+
   const pizzas = [
     {
       name: 'Маргарита',
       image: `${process.env.PUBLIC_URL}/images/margarita.png`,
       description: 'Моцарела, томати, базилік. Соус: томатний',
       variants: [
-        { volume: 'Мала', price: 120 },
-        { volume: 'Середня', price: 100 },
-        { volume: 'Велика', price: 150, 
-           
-        },
+        { size: 'Мала', price: 100 },
+        { size: 'Середня', price: 120 },
+        { size: 'Велика', price: 150 },
       ],
       extras: [
         { name: 'Сир', price: 20 },
         { name: 'Ковбаски', price: 30 },
         { name: 'Печериці', price: 25 },
         { name: 'Ананас', price: 15 },
-        { name: 'Кукурудза', price: 35 },
+        { name: 'Кукурудза', price: 15 },
         { name: 'Оливки', price: 20 },
-    ],
-      
+      ],
     },
     {
       name: 'Пепероні',
       image: `${process.env.PUBLIC_URL}/images/pepperoni.png`,
       description: 'Моцарела, салямі, прошутто котто, томати, гострий перць пепероні. Соус: томатний',
       variants: [
-        { volume: 'Мала', price: 120 },
-        { volume: 'Середня', price: 145 },
-        { volume: 'Велика', price: 175 },
+        { size: 'Мала', price: 110 },
+        { size: 'Середня', price: 145 },
+        { size: 'Велика', price: 175 },
       ],
       extras: [
         { name: 'Сир', price: 20 },
         { name: 'Ковбаски', price: 30 },
         { name: 'Печериці', price: 25 },
         { name: 'Ананас', price: 15 },
-        { name: 'Кукурудза', price: 35 },
+        { name: 'Кукурудза', price: 15 },
         { name: 'Оливки', price: 20 },
-    ],
-      
+      ],
     },
     {
       name: 'Чотири сири',
       image: `${process.env.PUBLIC_URL}/images/quattro_formaggi.png`,
       description: 'Моцарела, гауда, горгонзола та пармезан. Соус: вершковий',
       variants: [
-        { volume: 'Мала', price: 120 },
-        { volume: 'Середня', price: 120 },
-        { volume: 'Велика', price: 160 },
+        { size: 'Мала', price: 120 },
+        { size: 'Середня', price: 140 },
+        { size: 'Велика', price: 170 },
       ],
       extras: [
         { name: 'Сир', price: 20 },
         { name: 'Ковбаски', price: 30 },
         { name: 'Печериці', price: 25 },
         { name: 'Ананас', price: 15 },
-        { name: 'Кукурудза', price: 35 },
+        { name: 'Кукурудза', price: 15 },
         { name: 'Оливки', price: 20 },
-    ], 
+      ],
     },
     {
       name: 'Карбонара',
       image: `${process.env.PUBLIC_URL}/images/carbonara.png`,
       description: 'Моцарела, томати, прошутто котто, бекон та перепелині яйця. Соус: вершковий',
       variants: [
-        { volume: 'Мала', price: 120 },
-        { volume: 'Середня', price: 150 },
-        { volume: 'Велика', price: 200 },
+        { size: 'Мала', price: 120 },
+        { size: 'Середня', price: 150 },
+        { size: 'Велика', price: 200 },
       ],
       extras: [
         { name: 'Сир', price: 20 },
         { name: 'Ковбаски', price: 30 },
         { name: 'Печериці', price: 25 },
         { name: 'Ананас', price: 15 },
-        { name: 'Кукурудза', price: 35 },
+        { name: 'Кукурудза', price: 15 },
         { name: 'Оливки', price: 20 },
-    ],
-      
+      ],
     },
   ];
-  
 
   const drinks = [
     {
@@ -160,7 +167,7 @@ function App() {
     <Router>
       <Menu />
       <Routes>
-        <Route path="/" element={<Menu />} />
+        <Route path="/" element={<h2>Ласкаво просимо!</h2>} />
         <Route path="/pizza" element={pizzas.map((pizza, index) => (
             <PizzaItem key={index} pizza={pizza} addToCart={addToCart} />
           ))} 
@@ -169,7 +176,12 @@ function App() {
             <DrinkItem key={index} drink={drink} addToCart={addToCart} />
           ))} 
         />
-        <Route path="/cart" element={<Cart cartItems={cartItems} updateQuantity={updateQuantity} removeFromCart={removeFromCart} />} />
+        <Route path="/cart" element={
+          <>
+            <Cart cartItems={cartItems} updateQuantity={updateQuantity} removeFromCart={removeFromCart} />
+            <h3>Загальна сума: {calculateTotal()} грн</h3>
+          </>
+        } />
         <Route path="/order" element={<OrderForm cartItems={cartItems} />} />
       </Routes>
     </Router>

@@ -13,7 +13,9 @@ function DrinkItem({ drink, addToCart }) {
   const handleAddToCart = () => {
     const drinkToAdd = {
       ...drink,
-      selectedVariant,
+      selectedVariant, // Додаємо обраний варіант
+      totalPrice: selectedVariant.price, // Додаємо ціну
+      type: 'drink',
     };
     addToCart(drinkToAdd);
   };
