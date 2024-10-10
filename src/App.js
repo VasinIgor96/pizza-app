@@ -12,35 +12,48 @@ function App() {
 
   const addToCart = (item) => {
     const existingItemIndex = cartItems.findIndex(
-      (cartItem) => 
-        cartItem.name === item.name && 
-        (item.type === 'drink' 
-          ? cartItem.selectedVariant.volume === item.selectedVariant.volume // Перевірка по об'єму для напоїв
-          : cartItem.size === item.size) // Перевірка по розміру для піци
+      (cartItem) =>
+        cartItem.name === item.name &&
+        (item.type === 'drink'
+          ? cartItem.selectedVariant.volume === item.selectedVariant.volume
+          : cartItem.size === item.size)
     );
+
+    const extrasPrice = item.selectedExtras
+      ? item.selectedExtras.reduce((total, extra) => total + extra.price, 0)
+      : 0;
 
     if (existingItemIndex >= 0) {
       const updatedCartItems = [...cartItems];
       updatedCartItems[existingItemIndex].quantity += 1;
+      updatedCartItems[existingItemIndex].totalPrice = (updatedCartItems[existingItemIndex].totalPrice / updatedCartItems[existingItemIndex].quantity) * updatedCartItems[existingItemIndex].quantity; // Оновлюємо загальну ціну
       setCartItems(updatedCartItems);
     } else {
-      const totalPrice = item.type === 'drink'
+      const basePrice = item.type === 'drink'
         ? item.selectedVariant.price
-        : item.variants.find(v => v.size === item.size).price;
+        : item.variants.find((v) => v.size === item.size).price;
 
-      // Додаємо обрані інгредієнти до об'єкту товару
-      const selectedExtras = item.selectedExtras || []; // Передаємо обрані інгредієнти
-      setCartItems([...cartItems, { ...item, quantity: 1, totalPrice, selectedExtras }]);
+      const totalPrice = basePrice + extrasPrice;
+
+      setCartItems([...cartItems, { ...item, quantity: 1, totalPrice, selectedExtras: item.selectedExtras || [] }]);
     }
   };
 
   const updateQuantity = (index, newQuantity) => {
     const updatedCartItems = [...cartItems];
+
+    const extrasPrice = updatedCartItems[index].selectedExtras
+      ? updatedCartItems[index].selectedExtras.reduce((total, extra) => total + extra.price, 0)
+      : 0;
+
     updatedCartItems[index].quantity = newQuantity;
-    const price = updatedCartItems[index].type === 'drink'
-      ? updatedCartItems[index].selectedVariant.price // Отримуємо ціну напою
-      : updatedCartItems[index].variants.find(v => v.size === updatedCartItems[index].size).price; // Отримуємо ціну піци
-    updatedCartItems[index].totalPrice = price * newQuantity; // Оновлюємо загальну ціну
+
+    const basePrice = updatedCartItems[index].type === 'drink'
+      ? updatedCartItems[index].selectedVariant.price
+      : updatedCartItems[index].variants.find((v) => v.size === updatedCartItems[index].size).price;
+
+    updatedCartItems[index].totalPrice = (basePrice + extrasPrice) * newQuantity;
+
     setCartItems(updatedCartItems);
   };
 
@@ -49,7 +62,6 @@ function App() {
     setCartItems(updatedCartItems);
   };
 
-  // Функція для обчислення загальної суми
   const calculateTotal = () => {
     return cartItems.reduce((total, item) => total + (item.totalPrice * item.quantity), 0);
   };
@@ -174,19 +186,17 @@ function App() {
       <Routes>
         <Route path="/" element={<h2>Ласкаво просимо!</h2>} />
         <Route path="/pizza" element={pizzas.map((pizza, index) => (
-            <PizzaItem key={index} pizza={pizza} addToCart={addToCart} />
-          ))} 
-        />
+          <PizzaItem key={index} pizza={pizza} addToCart={addToCart} />
+        ))} />
         <Route path="/drinks" element={drinks.map((drink, index) => (
-            <DrinkItem key={index} drink={drink} addToCart={addToCart} />
-          ))} 
-        />
+          <DrinkItem key={index} drink={drink} addToCart={addToCart} />
+        ))} />
         <Route path="/cart" element={
           <>
-            <Cart 
-              cartItems={cartItems} 
-              updateQuantity={updateQuantity} 
-              removeFromCart={removeFromCart} 
+            <Cart
+              cartItems={cartItems}
+              updateQuantity={updateQuantity}
+              removeFromCart={removeFromCart}
             />
             <h3>Загальна сума: {calculateTotal()} грн</h3>
           </>
